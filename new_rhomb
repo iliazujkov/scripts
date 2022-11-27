@@ -1,0 +1,56 @@
+#/bin/bash
+N=$1
+if [[ $N -ne 0 ]]; then
+let rem_of_div="N%2"
+a=$(($N/2))
+	if (($rem_of_div!=0)); then #odd rhomb
+		a=$(($N/2+1))
+	for ((i=1; i<=a; i++)); do #upper half
+		for ((m=i; m<a; m++)); do
+			printf " "
+		done
+		for ((j=1; j<i*2; j++)); do
+			printf "*"
+		done
+		echo
+	done
+	for ((i=a-1; i>=1; i--)); do #bottom half
+        for ((m=a; m>i; m--)); do
+            printf " "
+        done
+        for ((j=1; j<i*2; j++)); do
+            printf "*"
+        done
+        echo
+    done
+	elif (($rem_of_div==0)); then #even rhomb
+        ots=N
+        num_el=1
+        for((j=0;j<N;j++));do #upper half
+            for((o=0;o<ots;o++));do
+                printf " "
+            done
+            for((i=0;i<num_el;i++)); do
+                printf "* "
+            done
+            let num_el="$num_el+1"
+            let ots="$ots-1"
+            echo
+        done
+        ots=2
+        let num_el="$N-1"
+        for((j=0;j<N-1;j++));do #bottom half
+            for((o=0;o<ots;o++));do
+                printf " "
+            done
+            for((i=0;i<num_el;i++)); do
+                printf "* "
+            done
+            let num_el="$num_el-1"
+            let ots="$ots+1"
+            echo
+        done
+	fi
+else
+	echo "Error size of rhomb"
+fi

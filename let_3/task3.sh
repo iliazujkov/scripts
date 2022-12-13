@@ -1,27 +1,47 @@
-#/bin/bash
+#!/bin/bash
 read number
-pos=0
 N=${#number} #size of number
+printf "["
+val_min=$number
+pos_i=0
+pos_j=0
 for ((i=0; i<N; i++)); do
-    for ((j=1; j<N; j++)); do  
-        if [ ${number:$j:1} -lt ${number:$i:1} ]; then #comparison of consecutive numbers
-            for ((o=0; o<N; o++)); do
-                if ((o == i)); then 
-                    printf "${number:$j:1}" #printing min number
-                    pos_j=$j #pos of min number
+    for ((j=0; j<N; j++)); do
+        if (( i == j )); then
+            continue
+        fi
+        number2=""  #for find min number
+        for ((o=0; o<N; o++)); do
+            if ((o == i)); then 
+                if (( o != N-1 )); then
+                    number2=$number2${number:$j:1}         
+                    number2=$number2${number:$o:1} 
                 else
-                    if ((o == j)); then
-                        printf "${number:$i:1}" #printing the replacement number
-                        pos_i=$i #pos of replacing number
-                    else
-                        printf "${number:$o:1}" #printing the unchanging part of a number
-                    fi
+                    number2=$number2${number:$o:1} 
+                    number2=$number2${number:$j:1} 
                 fi
-            done
-            printf ", $pos_i"
-            printf ", $pos_j"
-            echo
-            exit 0
-        fi  
+            else
+                if ((o == j)); then #skip min value
+                    continue
+                else
+                    number2=$number2${number:$o:1}
+                fi
+            fi
+        done
+        if [ $number2 -le $val_min ]; then 
+            val_min=$number2
+            pos_j=$j
+            pos_i=$i
+        fi
+        number2="" 
     done
 done
+printf "$val_min"
+if (($number == $val_min)); then #for const number
+echo "]"
+exit 0
+fi
+printf ", $pos_i"
+printf ", $pos_j"
+echo "]"
+exit 0
